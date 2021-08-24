@@ -118,7 +118,7 @@ elif args.dataset == 'cifar100':
         batch_size=args.test_batch_size, shuffle=True, **kwargs)
 else:
     # Train data
-    trainset = datasets.SVHN('./data.svhn', split='train', download=True,
+    trainset = datasets.SVHN('./data/svhn', split='train', download=True,
                     transform=transforms.Compose([
                         transforms.Pad(4),
                         transforms.RandomCrop(32),
