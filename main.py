@@ -118,7 +118,7 @@ elif args.dataset == 'cifar100':
         batch_size=args.test_batch_size, shuffle=True, **kwargs)
 else:
     # Train data
-    trainset = datasets.SVHN('./data.svhn', split='train', download=True,
+    trainset = datasets.SVHN('./data/svhn', split='train', download=True,
                     transform=transforms.Compose([
                         transforms.Pad(4),
                         transforms.RandomCrop(32),
@@ -126,7 +126,7 @@ else:
                         transforms.ToTensor(),
                         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                     ]))
-    # extraset = datasets.SVHN('./data.svhn', split='extra', download=True,
+    # extraset = datasets.SVHN('./data/svhn', split='extra', download=True,
     #                 transform=transforms.Compose([
     #                     transforms.Pad(4),
     #                     transforms.RandomCrop(32),
@@ -139,7 +139,7 @@ else:
     train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, **kwargs)
     # Test data
     test_loader = torch.utils.data.DataLoader(
-        datasets.SVHN('./data.svhn', split='test', download=True, transform=transforms.Compose([
+        datasets.SVHN('./data/svhn', split='test', download=True, transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                        ])),
