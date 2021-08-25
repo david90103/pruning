@@ -98,12 +98,31 @@ elif args.dataset == 'cifar100':
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))]))
+elif args.dataset == 'svhn':
+    # Train data
+    full_train_data = datasets.SVHN('./data/svhn', split='train', download=True,
+                    transform=transforms.Compose([
+                        transforms.Pad(4),
+                        transforms.RandomCrop(32),
+                        transforms.RandomHorizontalFlip(),
+                        transforms.ToTensor(),
+                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                    ]))
+    # extraset = datasets.SVHN('./data/svhn', split='extra', download=True,
+    #                 transform=transforms.Compose([
+    #                     transforms.Pad(4),
+    #                     transforms.RandomCrop(32),
+    #                     transforms.RandomHorizontalFlip(),
+    #                     transforms.ToTensor(),
+    #                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    #                 ]))
+    # full_train_data = torch.utils.data.ConcatDataset([trainset, extraset])
 else:
     raise ValueError("No valid dataset is given.")
 
 # Split validation data from train data
-train_data, valid_data = torch.utils.data.random_split(full_train_data, [40000,10000])
-partial_train_data, _ = torch.utils.data.random_split(train_data, [10000,30000])
+train_data, valid_data = torch.utils.data.random_split(full_train_data, [round(len(full_train_data) / 5 * 4), len(full_train_data) - round(len(full_train_data) / 5 * 4)])
+partial_train_data, _ = torch.utils.data.random_split(train_data, [len(train_data) - round(len(train_data) / 4 * 3), round(len(train_data) / 4 * 3)])
 train_loader = torch.utils.data.DataLoader(partial_train_data, batch_size=args.batch_size, shuffle=True, **kwargs)
 validation_loader = torch.utils.data.DataLoader(valid_data, batch_size=args.test_batch_size, shuffle=True, **kwargs)
 criterion = nn.CrossEntropyLoss()
