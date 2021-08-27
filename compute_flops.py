@@ -17,7 +17,7 @@ def print_model_param_nums(model=None, multiply_adds=True):
 
     return total
 
-def print_model_param_flops(model=None, input_res=224, multiply_adds=False, use_cuda=False):
+def print_model_param_flops(model=None, input_res=224, input_channels=3, multiply_adds=False, use_cuda=False):
 
     # prods = {}
     # def save_hook(name):
@@ -115,7 +115,7 @@ def print_model_param_flops(model=None, input_res=224, multiply_adds=False, use_
     total_flops = 0
     with torch.no_grad():
         foo(model)
-        input = Variable(torch.rand(3, 3, input_res, input_res))
+        input = Variable(torch.rand(input_channels, input_channels, input_res, input_res))
         if use_cuda:
             input = input.cuda()
         out = model(input)
@@ -125,7 +125,7 @@ def print_model_param_flops(model=None, input_res=224, multiply_adds=False, use_
         for h in hooks:
             h.remove()
         # print('  + Number of FLOPs: %.5fM' % (total_flops / 3 / 1e6))
-        return total_flops / 3
+        return total_flops / input_channels
 
 if __name__ == "__main__":
 

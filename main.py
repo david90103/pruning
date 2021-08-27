@@ -63,6 +63,8 @@ if args.dataset == 'mnist':
      # Train data
     full_train_data = datasets.MNIST('./data/mnist', train=True, download=True,
                     transform=transforms.Compose([
+                        transforms.Pad(4),
+                        transforms.RandomCrop(32),
                         transforms.ToTensor(),
                         transforms.Normalize((0.1307,), (0.3081,))
                     ]))
@@ -72,7 +74,9 @@ if args.dataset == 'mnist':
     # Test data
     test_loader = torch.utils.data.DataLoader(
         datasets.MNIST('./data/mnist', train=False, transform=transforms.Compose([
-                           transforms.ToTensor(),
+                           transforms.Pad(4),
+                           transforms.RandomCrop(32),
+                           transforms.ToTensor(),        
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
         batch_size=args.test_batch_size, shuffle=True, **kwargs)

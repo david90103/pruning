@@ -84,6 +84,7 @@ if args.model:
 # Load data
 kwargs = {'num_workers': 4, 'pin_memory': True} if args.cuda else {}
 
+input_channels = 3
 if args.dataset == 'cifar10':
     full_train_data = datasets.CIFAR10('./data/cifar10', train=True, transform=transforms.Compose([
         transforms.Pad(4),
@@ -98,6 +99,13 @@ elif args.dataset == 'cifar100':
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))]))
+elif args.dataset == 'mnist':
+    input_channels = 1
+    full_train_data = datasets.MNIST('./data/mnist', train=True, download=True, transform=transforms.Compose([
+        transforms.Pad(4),
+        transforms.RandomCrop(32),
+        transforms.ToTensor(),
+        transforms.Normalize((0.1307,), (0.3081,))]))
 elif args.dataset == 'svhn':
     # Train data
     full_train_data = datasets.SVHN('./data/svhn', split='train', download=True,
@@ -287,7 +295,7 @@ def get_cfg_mask(cfg, criterion_list):
     return cfg_mask
 
 def apply_weights(model, newmodel, cfg_mask):
-    start_mask = torch.ones(3)
+    start_mask = torch.ones(input_channels)
     layer_id_in_cfg = 0
     end_mask = cfg_mask[layer_id_in_cfg]
     for [m0, m1] in zip(model.modules(), newmodel.modules()):
@@ -373,8 +381,8 @@ def get_pruned_flops_ratio(model, new_model):
     # NOTE Use input res 32 for cifar dataset
     model.cpu()
     new_model.cpu()
-    total = compute_flops.print_model_param_flops(model=model, input_res=32, use_cuda=False)
-    new_total = compute_flops.print_model_param_flops(model=new_model, input_res=32, use_cuda=False)
+    total = compute_flops.print_model_param_flops(model=model, input_res=32, input_channels=input_channels, use_cuda=False)
+    new_total = compute_flops.print_model_param_flops(model=new_model, input_res=32, input_channels=input_channels, use_cuda=False)
     if args.cuda:
         model.cuda()
         new_model.cuda()
