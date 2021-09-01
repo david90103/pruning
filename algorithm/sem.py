@@ -1,16 +1,18 @@
 import copy
+import random
 import numpy as np
 from algorithm.algorithm_base import *
 from random import randint, uniform
 
 class SEM(AlgorithmBase):
 
-    def __init__(self, dimension, population_size, region_num, searcher_num, sample_num, cthre, mthre):
+    def __init__(self, dimension, population_size, region_num, searcher_num, sample_num, player_num, cthre, mthre):
         super().__init__()
         self.dimension = dimension
         self.region_num = int(region_num)
         self.searcher_num = int(searcher_num)
         self.sample_num = int(sample_num)
+        self.player_num = int(player_num)
         self.cthre = float(cthre)
         self.mthre = float(mthre)
         self.f = 0.5
@@ -191,9 +193,15 @@ class SEM(AlgorithmBase):
             self.tb[r] += 1
         
         for s in range(self.searcher_num):
+            skip_regions = random.sample(range(self.region_num), self.region_num - self.player_num)
             chooseR = 0
-            chooseE = E[s][0]
+            chooseE = E[s][chooseR]
+            while chooseR in skip_regions:
+                chooseR += 1
+                chooseE = E[s][chooseR]
             for r in range(self.region_num):
+                if r in skip_regions:
+                    continue
                 if chooseE < E[s][r]:
                     chooseR = r
                     chooseE = E[s][r]
