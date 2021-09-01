@@ -249,6 +249,7 @@ class SEM(AlgorithmBase):
         sample_num_origin = self.sample_num
         self.region_num = self.region_num // 2
         self.sample_num = self.sample_num * 2
+        self.player_num = self.region_num
 
         # Reassign sample
         queue = []
