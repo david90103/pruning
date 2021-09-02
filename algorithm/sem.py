@@ -249,7 +249,6 @@ class SEM(AlgorithmBase):
         sample_num_origin = self.sample_num
         self.region_num = self.region_num // 2
         self.sample_num = self.sample_num * 2
-        self.player_num = self.region_num
 
         # Reassign sample
         queue = []
@@ -315,11 +314,11 @@ class SEM(AlgorithmBase):
         for it in range(iterations):
             self.visionSearch(it, iterations)
             self.marketingResearch()
-            if (it == iterations // 2 or it == iterations // 4 * 3) and self.region_num > 1:
-            # if (it == iterations // 2) and self.region_num > 1:
-                self.printPopulation()
-                self.reduceRegion()
-                self.printPopulation()
+            # if (it == iterations // 2 or it == iterations // 4 * 3) and self.region_num > 1:
+            # # if (it == iterations // 2) and self.region_num > 1:
+            #     self.printPopulation()【
+            #     self.reduceRegion()
+            #     self.printPopulation()
             self.printRatioBest()
             print("Evaluations after this iteration:", str(self.evaluate_count))
             print("Iteration", it + 1, "end, best fitness", self.best_fitness, self.roundSolution(self.best_solution))
