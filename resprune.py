@@ -56,6 +56,7 @@ parser.add_argument('--c2',         default=2,    type=float,  help='pso c2')
 parser.add_argument('--region',     default=4,      type=int,    help='se region')
 parser.add_argument('--searcher',   default=1,      type=int,    help='se searcher')
 parser.add_argument('--sample',     default=4,      type=int,    help='se sample')
+parser.add_argument('--player',     default=3,      type=int,    help='se player')
 parser.add_argument('--cthre',      default=0.5,    type=float,  help='se crossover thre')
 parser.add_argument('--mthre',      default=0.1,   type=float,  help='se mutation thre')
 
@@ -418,7 +419,7 @@ if args.algo == "seb":
 
 if args.algo == "sem":
     print("Start searching with SE modified, region ", str(args.region), "searcher", str(args.searcher), "sample", str(args.sample))
-    algo = algorithm.SEM(dim, args.pop, args.region, args.searcher, args.sample, args.cthre, args.mthre)
+    algo = algorithm.SEM(dim, args.pop, args.region, args.searcher, args.sample, args.player, args.cthre, args.mthre)
     best, ratio_list = algo.run(args.iter, evaluate_func=evaluate)
     print("SE modified search end, found best:")
     
