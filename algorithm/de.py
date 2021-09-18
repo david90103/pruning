@@ -38,11 +38,17 @@ class DE(AlgorithmBase):
             r2 = randint(0, self.population_size - 1)
             r3 = randint(0, self.population_size - 1)
             for j in range(len(population[i].position)):
-                mutation_value = population[r1].position[j] + self.f * (population[r2].position[j] - population[r3].position[j])
-                if mutation_value > 0.99999:
-                    mutation_value = 0.99999
-                if mutation_value < 0:
-                    mutation_value = 0
+                if self.best_solution:
+                    # mutation_value = self.best_solution.position[j] + self.f * (population[r2].position[j] - population[r3].position[j])
+                    mutation_value = population[i].position[j] + \
+                                self.f * (self.best_solution.position[j] - population[i].position[j] + \
+                                population[r1].position[j] - population[r2].position[j])
+                else:
+                    mutation_value = population[r1].position[j] + self.f * (population[r2].position[j] - population[r3].position[j])
+                # if mutation_value > 0.99999:
+                #     mutation_value = 0.99999
+                # if mutation_value < 0:
+                #     mutation_value = 0
                 temp.append(mutation_value)
 
             solution = Solution(self.dimension)
