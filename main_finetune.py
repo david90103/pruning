@@ -93,7 +93,7 @@ elif args.dataset == 'cifar10':
                            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
                        ])),
         batch_size=args.test_batch_size, shuffle=True, **kwargs)
-else:
+elif args.dataset == 'cifar100':
     train_loader = torch.utils.data.DataLoader(
         datasets.CIFAR100('./data/cifar100', train=True, download=True,
                        transform=transforms.Compose([
@@ -108,6 +108,34 @@ else:
         datasets.CIFAR100('./data/cifar100', train=False, transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+                       ])),
+        batch_size=args.test_batch_size, shuffle=True, **kwargs)
+else:
+    # Train data
+    trainset = datasets.SVHN('./data/svhn', split='train', download=True,
+                    transform=transforms.Compose([
+                        transforms.Pad(4),
+                        transforms.RandomCrop(32),
+                        transforms.RandomHorizontalFlip(),
+                        transforms.ToTensor(),
+                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                    ]))
+    # extraset = datasets.SVHN('./data/svhn', split='extra', download=True,
+    #                 transform=transforms.Compose([
+    #                     transforms.Pad(4),
+    #                     transforms.RandomCrop(32),
+    #                     transforms.RandomHorizontalFlip(),
+    #                     transforms.ToTensor(),
+    #                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    #                 ]))
+    # full_train_data = torch.utils.data.ConcatDataset([trainset, extraset])
+    # Split validation data from train data
+    train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, **kwargs)
+    # Test data
+    test_loader = torch.utils.data.DataLoader(
+        datasets.SVHN('./data/svhn', split='test', download=True, transform=transforms.Compose([
+                           transforms.ToTensor(),
+                           transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                        ])),
         batch_size=args.test_batch_size, shuffle=True, **kwargs)
 
