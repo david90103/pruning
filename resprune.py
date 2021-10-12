@@ -104,12 +104,21 @@ elif args.dataset == 'cifar100':
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))]))
+elif args.dataset == 'svhn':
+    full_train_data = datasets.SVHN('./data/svhn', split='train', download=True,
+        transform=transforms.Compose([
+        transforms.Pad(4),
+        transforms.RandomCrop(32),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]))
 else:
     raise ValueError("No valid dataset is given.")
-
 # Split validation data from train data
 if args.dataset == 'mnist':
     train_data, valid_data = torch.utils.data.random_split(full_train_data, [50000,10000])
+elif args.dataset == 'svhn':
+    train_data, valid_data = torch.utils.data.random_split(full_train_data, [40000,33257])
 else:
     train_data, valid_data = torch.utils.data.random_split(full_train_data, [40000,10000])
 partial_train_data, _ = torch.utils.data.random_split(train_data, [10000,30000])
