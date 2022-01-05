@@ -3,8 +3,8 @@
 REGION=( 4 )
 SEARCHER=( 1 )
 SAMPLE=( 4 )
-C_THRE=( 0.3 0.5 0.7 )
-M_THRE=( 0.01 0.02 )
+C_THRE=( 0.5 )
+M_THRE=( 0.1 )
 
 dir=output/params/sem/run2
 

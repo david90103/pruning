@@ -159,3 +159,4 @@ nohup*
 *.tar
 *.png
 *.txt
+plot/
