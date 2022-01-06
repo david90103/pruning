@@ -193,7 +193,9 @@ class SEM(AlgorithmBase):
             self.tb[r] += 1
         
         for s in range(self.searcher_num):
-            skip_regions = random.sample(range(self.region_num), self.region_num - self.player_num)
+            skip_regions = []
+            if self.region_num > self.player_num:
+                skip_regions = random.sample(range(self.region_num), self.region_num - self.player_num)
             chooseR = 0
             chooseE = E[s][chooseR]
             while chooseR in skip_regions:
