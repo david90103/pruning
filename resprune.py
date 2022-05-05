@@ -482,10 +482,10 @@ if args.algo == "tpe":
         return best_fitness
 
     search_space = {
-        'region'    : hp.choice('region', [1, 2, 4, 8]),
-        'searcher'  : hp.choice('searcher', [1, 2, 4, 8]),
-        'sample'    : hp.choice('sample', [1, 2, 4, 8]),
-        'player'    : hp.choice('player', [1, 2, 4, 8]),
+        'region'    : hp.choice('region', [1, 2, 3, 4, 5, 6, 7, 8]),
+        'searcher'  : hp.choice('searcher', [1, 2, 3, 4, 5, 6, 7, 8]),
+        'sample'    : hp.choice('sample', [1, 2, 3, 4, 5, 6, 7, 8]),
+        'player'    : hp.choice('player', [1, 2, 3, 4, 5, 6, 7, 8]),
         'cthre'     : hp.uniform('cthre', 0, 1),
         'mthre'     : hp.uniform('mthre', 0, 1),
     }
