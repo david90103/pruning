@@ -15,6 +15,8 @@ from models import *
 import algorithm
 import compute_flops
 
+from hyperopt import hp
+from hyperopt import fmin, tpe, space_eval
 
 # Prune settings
 parser = argparse.ArgumentParser(description='PyTorch Slimming CIFAR prune')
@@ -58,6 +60,7 @@ parser.add_argument('--sample',     default=4,      type=int,    help='se sample
 parser.add_argument('--player',     default=3,      type=int,    help='se player')
 parser.add_argument('--cthre',      default=0.5,    type=float,  help='se crossover thre')
 parser.add_argument('--mthre',      default=0.1,   type=float,  help='se mutation thre')
+parser.add_argument('--tpe',        default=1000,   type=int,  help='tpe evaluations')
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -484,7 +487,7 @@ if args.algo == "seb":
 if args.algo == "sem":
     print("Start searching with SE modified, region ", str(args.region), "searcher", str(args.searcher), "sample", str(args.sample))
     algo = algorithm.SEM(dim, args.pop, args.region, args.searcher, args.sample, args.player, args.cthre, args.mthre)
-    best, ratio_list = algo.run(args.iter, evaluate_func=evaluate)
+    best, ratio_list, best_fitness = algo.run(args.iter, evaluate_func=evaluate)
     print("SE modified search end, found best:")
     
 if args.algo == "se":
@@ -522,6 +525,28 @@ if args.algo == "random":
     algo = algorithm.Random(dim, args.pop)
     best, ratio_list = algo.run(args.pop * args.iter, evaluate_func=evaluate)
     print("Random search end, found best:")
+
+# SE Parameter Search Using TPE
+if args.algo == "tpe":
+    def tpe_objective(tpe_args):
+        algo = algorithm.SEM(dim, args.pop, tpe_args["region"], tpe_args["searcher"], tpe_args["sample"], tpe_args["player"], tpe_args["cthre"], tpe_args["mthre"])
+        _, _, best_fitness = algo.run(1000000, evaluate_func=evaluate)
+        print("TPE one evaluation done, fitness:", best_fitness)
+
+        return best_fitness
+
+    search_space = {
+        'region'    : hp.choice('region', [1, 2, 4, 8]),
+        'searcher'  : hp.choice('searcher', [1, 2, 4, 8]),
+        'sample'    : hp.choice('sample', [1, 2, 4, 8]),
+        'player'    : hp.choice('player', [1, 2, 4, 8]),
+        'cthre'     : hp.uniform('cthre', 0, 1),
+        'mthre'     : hp.uniform('mthre', 0, 1),
+    }
+
+    best = fmin(tpe_objective, search_space, algo=tpe.suggest, max_evals=args.tpe, verbose=False)
+    print(best)
+    # print(space_eval(space, best))
 
 evaluate(best, save_model=True, save_name="best")
 for sol in ratio_list:
