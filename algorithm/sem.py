@@ -175,7 +175,8 @@ class SEM(AlgorithmBase):
         E = [[0 for _ in range(self.region_num)] for _ in range(self.searcher_num)]
         for s in range(self.searcher_num):
             for r in range(self.region_num):
-                E[s][r] = T[s][r] * V[s][r] * M[s][r]
+                #E[s][r] = T[s][r] * V[s][r] * M[s][r]
+                E[s][r] = T[s][r] * (1 - V[s][r]) * (1 - M[s][r])
         
         # Sample update sampleV
         for r in range(self.region_num):
@@ -328,4 +329,4 @@ class SEM(AlgorithmBase):
             # if self.evaluate_count >= 3200:
             #     break
 
-        return self.best_solution, self.ratio_best
+        return self.best_solution, self.ratio_best, self.best_fitness

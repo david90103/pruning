@@ -122,7 +122,7 @@ class GWO(AlgorithmBase):
             self.evalAndUpdateWolves()
             # Update a
             # TODO: Different update strategy of a
-            self.a = 2 - it * (2 / (3 / 4 * iterations))
+            self.a = 2 - it * (2 / iterations)
             if self.a < 0:
                 self.a = 0
             self.updatePosition()
