@@ -13,7 +13,7 @@ python main.py --save origin/cifar10/resnet110  \
 
 2. 使用 SE 進行 CNN 濾波器修剪
 ```
-python resprune.py  --model origin/cifar10/resnet110/model_best.pth.tar     \
+python resprune.py  --model origin/cifar10/resnet110/model_best.pth.tar      \
                     --save output/sem/pruned/resnet110/run1                  \
                     --algo sem                                               \
                     --depth 110                                              \
@@ -22,5 +22,9 @@ python resprune.py  --model origin/cifar10/resnet110/model_best.pth.tar     \
 
 3. 微調修剪後模型
 ```
-python main_finetune.py --refine output/sem/pruned/resnet110/run1/pruned_best.pth.tar --save finetuned
+python main_finetune.py --refine output/sem/pruned/resnet110/run1/pruned_best.pth.tar   \
+                        --dataset cifar10                                               \
+                        --arch resnet                                                   \
+                        --depth 110                                                     \
+                        --save finetuned
 ```
