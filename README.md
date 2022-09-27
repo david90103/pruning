@@ -1,4 +1,4 @@
-以搜尋經濟學演算法修剪卷積神經網路濾波器
+#### 以搜尋經濟學演算法修剪卷積神經網路濾波器
 
 GECCO'22 Paper: https://dl.acm.org/doi/abs/10.1145/3520304.3528935
 
@@ -28,3 +28,10 @@ python main_finetune.py --refine output/sem/pruned/resnet110/run1/pruned_best.pt
                         --depth 110                                                     \
                         --save finetuned
 ```
+
+#### 比較對象 Github 連結
+- L1-norm: https://github.com/Eric-mingjie/rethinking-network-pruning
+- FPGM: https://github.com/he-y/filter-pruning-geometric-median
+- SFP: https://github.com/he-y/soft-filter-pruning
+- HRank: https://github.com/lmbxmu/HRank
+- GAL: https://github.com/ShaohuiLin/GAL
